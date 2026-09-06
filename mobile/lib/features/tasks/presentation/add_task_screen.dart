@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smart_scheduler_mobile/core/theme/app_theme.dart';
 import 'package:smart_scheduler_mobile/core/network/api_client.dart';
-import 'package:smart_scheduler_mobile/core/widgets/botmartz_header.dart';
 
 class AddTaskScreen extends StatefulWidget {
   const AddTaskScreen({super.key});
@@ -138,7 +137,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const BotmartzHeader(),
             Padding(
               padding: const EdgeInsets.all(24),
               child: Container(

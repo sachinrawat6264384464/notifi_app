@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smart_scheduler_mobile/core/theme/app_theme.dart';
 import 'package:smart_scheduler_mobile/core/network/api_client.dart';
-import 'package:smart_scheduler_mobile/core/widgets/community_banner.dart';
-import 'package:smart_scheduler_mobile/core/widgets/botmartz_header.dart';
 import 'package:smart_scheduler_mobile/features/tasks/presentation/task_details_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -90,10 +88,52 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.backgroundColor,
-      appBar: const BotmartzHeader(),
+      appBar: AppBar(
+        title: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: 'BOTMARTZ ',
+                style: GoogleFonts.inter(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w900,
+                  color: AppTheme.textPrimary,
+                  letterSpacing: 0.5,
+                ),
+              ),
+              TextSpan(
+                text: 'AI',
+                style: GoogleFonts.inter(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w900,
+                  color: AppTheme.primaryColor,
+                ),
+              ),
+            ],
+          ),
+        ),
+        elevation: 0,
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1.0),
+          child: Container(color: AppTheme.borderColor, height: 1.0),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications_outlined, color: AppTheme.primaryColor),
+            tooltip: 'Notifications',
+            onPressed: () => Navigator.pushNamed(context, '/notifications'),
+          ),
+          IconButton(
+            icon: const Icon(Icons.person_outline, color: AppTheme.primaryColor),
+            tooltip: 'Profile',
+            onPressed: () => Navigator.pushNamed(context, '/profile'),
+          ),
+        ],
+      ),
       body: Column(
         children: [
-          const CommunityBanner(),
           Expanded(
             child: _isLoading
                 ? const Center(child: CircularProgressIndicator(color: AppTheme.primaryColor))
