@@ -1,0 +1,29 @@
+name: smart_scheduler_mobile
+description: Smart Personal Scheduler & Reminder Mobile Application
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+  provider: ^6.1.2
+  dio: ^5.4.1
+  firebase_core: ^2.27.0
+  firebase_auth: ^4.17.8
+  firebase_messaging: ^14.7.19
+  intl: ^0.19.0
+  flutter_secure_storage: ^9.0.0
+  table_calendar: ^3.0.9
+  google_fonts: ^6.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
