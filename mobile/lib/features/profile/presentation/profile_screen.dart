@@ -70,8 +70,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _signOut() async {
-    await FirebaseAuth.instance.signOut();
-    if (mounted) Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+    try {
+      await FirebaseAuth.instance.signOut();
+    } catch (e) {
+      debugPrint("Sign out note: $e");
+    } finally {
+      if (mounted) {
+        Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+      }
+    }
   }
 
   @override
