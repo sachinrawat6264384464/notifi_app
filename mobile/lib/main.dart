@@ -17,7 +17,17 @@ import 'package:smart_scheduler_mobile/features/settings/presentation/settings_s
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   try {
-    await Firebase.initializeApp();
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp(
+        options: const FirebaseOptions(
+          apiKey: "AIzaSyDummyApiKeyForSmartSchedulerApp",
+          appId: "1:1234567890:android:abcdef123456",
+          messagingSenderId: "1234567890",
+          projectId: "botmartz-ai-scheduler",
+          storageBucket: "botmartz-ai-scheduler.appspot.com",
+        ),
+      );
+    }
   } catch (e) {
     debugPrint("Firebase init note: $e");
   }

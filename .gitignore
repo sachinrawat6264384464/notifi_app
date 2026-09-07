@@ -28,3 +28,8 @@ mobile/.pub/
 *.swo
 .DS_Store
 Thumbs.db
+
+# JDK & DB
+jdk17/
+jdk17.zip
+*.db
