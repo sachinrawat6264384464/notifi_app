@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smart_scheduler_mobile/core/theme/app_theme.dart';
 import 'package:smart_scheduler_mobile/core/network/api_client.dart';
@@ -22,14 +23,23 @@ class _SignupScreenState extends State<SignupScreen> {
   String? _errorMessage;
 
   void _signup() async {
-    if (_nameController.text.trim().isEmpty ||
-        _emailController.text.trim().isEmpty ||
-        _passwordController.text.trim().isEmpty) {
+    final email = _emailController.text.trim();
+    final name = _nameController.text.trim();
+    final password = _passwordController.text.trim();
+    final confirmPassword = _confirmPasswordController.text.trim();
+
+    if (name.isEmpty || email.isEmpty || password.isEmpty) {
       setState(() => _errorMessage = 'Please fill all required fields');
       return;
     }
 
-    if (_passwordController.text.trim() != _confirmPasswordController.text.trim()) {
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    if (!emailRegex.hasMatch(email)) {
+      setState(() => _errorMessage = 'Please enter a valid email address (e.g. name@domain.com)');
+      return;
+    }
+
+    if (password != confirmPassword) {
       setState(() => _errorMessage = 'Passwords do not match');
       return;
     }
@@ -44,9 +54,9 @@ class _SignupScreenState extends State<SignupScreen> {
       final response = await client.dio.post(
         '/auth/register',
         data: {
-          'name': _nameController.text.trim(),
-          'email': _emailController.text.trim(),
-          'password': _passwordController.text.trim(),
+          'name': name,
+          'email': email,
+          'password': password,
         },
       );
 
@@ -61,9 +71,24 @@ class _SignupScreenState extends State<SignupScreen> {
       }
     } catch (e) {
       debugPrint("Signup exception: $e");
+      String err = "Registration failed. Please try again.";
+      if (e is DioException) {
+        final data = e.response?.data;
+        if (data is Map) {
+          if (data['detail'] != null) {
+            if (data['detail'] is String) {
+              err = data['detail'];
+            } else if (data['detail'] is List && data['detail'].isNotEmpty) {
+              err = data['detail'][0]['msg'] ?? err;
+            }
+          } else if (data['message'] != null) {
+            err = data['message'];
+          }
+        }
+      }
       if (mounted) {
         setState(() {
-          _errorMessage = "Failed to register. Email may already be in use.";
+          _errorMessage = err;
         });
       }
     } finally {

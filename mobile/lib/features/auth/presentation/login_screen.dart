@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smart_scheduler_mobile/core/theme/app_theme.dart';
 import 'package:smart_scheduler_mobile/core/network/api_client.dart';
@@ -19,8 +20,17 @@ class _LoginScreenState extends State<LoginScreen> {
   String? _errorMessage;
 
   void _login() async {
-    if (_emailController.text.trim().isEmpty || _passwordController.text.trim().isEmpty) {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
       setState(() => _errorMessage = "Please enter work email and password");
+      return;
+    }
+
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    if (!emailRegex.hasMatch(email)) {
+      setState(() => _errorMessage = 'Please enter a valid email address (e.g. name@domain.com)');
       return;
     }
 
@@ -34,8 +44,8 @@ class _LoginScreenState extends State<LoginScreen> {
       final response = await client.dio.post(
         '/auth/login',
         data: {
-          'email': _emailController.text.trim(),
-          'password': _passwordController.text.trim(),
+          'email': email,
+          'password': password,
         },
       );
 
@@ -50,9 +60,24 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } catch (e) {
       debugPrint("Auth login exception: $e");
+      String err = "Invalid email or password. Please try again.";
+      if (e is DioException) {
+        final data = e.response?.data;
+        if (data is Map) {
+          if (data['detail'] != null) {
+            if (data['detail'] is String) {
+              err = data['detail'];
+            } else if (data['detail'] is List && data['detail'].isNotEmpty) {
+              err = data['detail'][0]['msg'] ?? err;
+            }
+          } else if (data['message'] != null) {
+            err = data['message'];
+          }
+        }
+      }
       if (mounted) {
         setState(() {
-          _errorMessage = "Invalid email or password. Please try again.";
+          _errorMessage = err;
         });
       }
     } finally {
