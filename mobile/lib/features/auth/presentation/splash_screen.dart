@@ -18,10 +18,14 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _checkAuth() async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 1));
     if (!mounted) return;
     try {
-      final user = getCurrentUserSafely();
+      final user = await FirebaseAuth.instance.authStateChanges().first.timeout(
+        const Duration(seconds: 3),
+        onTimeout: () => FirebaseAuth.instance.currentUser,
+      );
+      if (!mounted) return;
       if (user != null) {
         Navigator.pushReplacementNamed(context, '/dashboard');
       } else {

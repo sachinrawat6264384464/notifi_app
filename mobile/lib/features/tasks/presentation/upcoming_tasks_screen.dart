@@ -116,6 +116,14 @@ class _FilteredTasksScreenState extends State<FilteredTasksScreen> {
                     );
                   },
                 ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.pushNamed(context, '/add-task').then((_) => _fetchTasks());
+        },
+        backgroundColor: AppTheme.primaryBlue,
+        icon: const Icon(Icons.add, color: Colors.white),
+        label: const Text('Add Task', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+      ),
     );
   }
 }

@@ -147,20 +147,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Productivity Overview',
-                                    style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),
-                                  ),
-                                  Text(
-                                    'Real-time overview of tasks & scheduled notifications',
-                                    style: GoogleFonts.inter(fontSize: 13, color: AppTheme.textSecondary),
-                                  ),
-                                ],
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Productivity Overview',
+                                      style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),
+                                    ),
+                                    const SizedBox(height: 2),
+                                    Text(
+                                      'Real-time overview of tasks & scheduled notifications',
+                                      style: GoogleFonts.inter(fontSize: 12, color: AppTheme.textSecondary),
+                                    ),
+                                  ],
+                                ),
                               ),
+                              const SizedBox(width: 12),
                               ElevatedButton.icon(
                                 onPressed: () => Navigator.pushNamed(context, '/add-task'),
                                 icon: const Icon(Icons.add, size: 18),
@@ -168,6 +173,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppTheme.primaryColor,
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                                 ),
                               ),
                             ],
@@ -266,6 +272,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => Navigator.pushNamed(context, '/add-task'),
+        backgroundColor: AppTheme.primaryColor,
+        icon: const Icon(Icons.add, color: Colors.white),
+        label: const Text('Add Task', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,

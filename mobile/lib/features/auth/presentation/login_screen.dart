@@ -32,9 +32,11 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.pushReplacementNamed(context, '/dashboard');
       }
     } catch (e) {
-      debugPrint("Auth login exception: $e. Navigating to dashboard for local testing.");
+      debugPrint("Auth login exception: $e");
       if (mounted) {
-        Navigator.pushReplacementNamed(context, '/dashboard');
+        setState(() {
+          _errorMessage = e.toString().replaceAll(RegExp(r'\[.*?\]'), '').trim();
+        });
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);

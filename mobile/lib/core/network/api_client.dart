@@ -24,14 +24,23 @@ class ApiClient {
         onRequest: (options, handler) async {
           final user = FirebaseAuth.instance.currentUser;
           if (user != null) {
-            final token = await user.getIdToken();
-            options.headers['Authorization'] = 'Bearer $token';
+            try {
+              final token = await user.getIdToken();
+              options.headers['Authorization'] = 'Bearer $token';
+            } catch (e) {
+              debugPrint('Failed to retrieve token: $e');
+            }
           }
           return handler.next(options);
         },
-        onError: (DioException error, handler) {
-          // Centralized network error logging
+        onError: (DioException error, handler) async {
           debugPrint('API Error [${error.response?.statusCode}]: ${error.response?.data}');
+          if (error.response?.statusCode == 401) {
+            debugPrint('Session expired or unauthorized (401). Triggering sign out.');
+            try {
+              await FirebaseAuth.instance.signOut();
+            } catch (_) {}
+          }
           return handler.next(error);
         },
       ),

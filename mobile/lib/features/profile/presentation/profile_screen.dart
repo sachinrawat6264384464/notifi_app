@@ -28,20 +28,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _loadProfile() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      _email = user.email ?? _email;
+      if (user.displayName != null && user.displayName!.isNotEmpty) {
+        _nameController.text = user.displayName!;
+      }
+    }
     try {
       final client = ApiClient();
       final response = await client.dio.get('/users/me');
       if (response.data['success'] == true) {
         final data = response.data['data'];
         setState(() {
-          _nameController.text = data['name'] ?? 'BOTMARTZ AI Architect';
-          _email = data['email'] ?? 'user@botmartz.ai';
+          _nameController.text = data['name'] ?? user?.displayName ?? 'Smart Scheduler User';
+          _email = data['email'] ?? user?.email ?? _email;
           _timezone = data['timezone'] ?? 'UTC';
           _isLoading = false;
         });
       }
     } catch (e) {
-      setState(() => _isLoading = false);
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
