@@ -21,6 +21,7 @@ class TaskService:
             due_at=task_in.due_at,
             priority=task_in.priority,
             category=task_in.category,
+            subtasks=task_in.subtasks or [],
             status="pending"
         )
         db.add(task)

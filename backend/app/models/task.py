@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime, timezone
 from sqlalchemy import Column, String, Text, DateTime, ForeignKey, Index
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import relationship
 from app.db.session import Base
 
@@ -17,6 +17,7 @@ class Task(Base):
     priority = Column(String(20), nullable=False, default="medium")  # low, medium, high, urgent
     category = Column(String(50), nullable=True)
     status = Column(String(20), nullable=False, default="pending", index=True)  # pending, in_progress, completed, overdue, cancelled
+    subtasks = Column(JSONB, nullable=False, default=list)
     created_at = Column(DateTime(timezone=True), nullable=False, default=lambda: datetime.now(timezone.utc))
     updated_at = Column(DateTime(timezone=True), nullable=False, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 

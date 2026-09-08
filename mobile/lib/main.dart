@@ -14,7 +14,9 @@ import 'package:smart_scheduler_mobile/features/notifications/presentation/notif
 import 'package:smart_scheduler_mobile/features/profile/presentation/profile_screen.dart';
 import 'package:smart_scheduler_mobile/features/settings/presentation/settings_screen.dart';
 
-import 'package:flutter/foundation.dart';
+import 'package:provider/provider.dart';
+import 'package:smart_scheduler_mobile/core/theme/theme_provider.dart';
+import 'package:smart_scheduler_mobile/features/dashboard/presentation/pages/analytics_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,7 +49,12 @@ void main() async {
     debugPrint("Firebase initialization gracefully bypassed: $e");
   }
 
-  runApp(const SmartSchedulerApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ThemeProvider(),
+      child: const SmartSchedulerApp(),
+    ),
+  );
 }
 
 class SmartSchedulerApp extends StatelessWidget {
@@ -55,27 +62,34 @@ class SmartSchedulerApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Smart Scheduler',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.darkTheme,
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const SplashScreen(),
-        '/login': (context) => const LoginScreen(),
-        '/signup': (context) => const SignupScreen(),
-        '/forgot-password': (context) => const ForgotPasswordScreen(),
-        '/email-verification': (context) => const EmailVerificationScreen(),
-        '/dashboard': (context) => const DashboardScreen(),
-        '/add-task': (context) => const AddTaskScreen(),
-        '/calendar': (context) => const CalendarScreen(),
-        '/upcoming-tasks': (context) => const FilteredTasksScreen(statusFilter: 'pending', title: 'Upcoming Tasks'),
-        '/completed-tasks': (context) => const FilteredTasksScreen(statusFilter: 'completed', title: 'Completed Tasks'),
-        '/overdue-tasks': (context) => const FilteredTasksScreen(statusFilter: 'overdue', title: 'Overdue Tasks'),
-        '/notifications': (context) => const NotificationsScreen(),
-        '/profile': (context) => const ProfileScreen(),
-        '/settings': (context) => const SettingsScreen(),
-        '/reminder-config': (context) => const ReminderConfigScreen(),
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, child) {
+        return MaterialApp(
+          title: 'BOTMARTZ AI',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: themeProvider.themeMode,
+          initialRoute: '/',
+          routes: {
+            '/': (context) => const SplashScreen(),
+            '/login': (context) => const LoginScreen(),
+            '/signup': (context) => const SignupScreen(),
+            '/forgot-password': (context) => const ForgotPasswordScreen(),
+            '/email-verification': (context) => const EmailVerificationScreen(),
+            '/dashboard': (context) => const DashboardScreen(),
+            '/analytics': (context) => const AnalyticsScreen(),
+            '/add-task': (context) => const AddTaskScreen(),
+            '/calendar': (context) => const CalendarScreen(),
+            '/upcoming-tasks': (context) => const FilteredTasksScreen(statusFilter: 'pending', title: 'Upcoming Tasks'),
+            '/completed-tasks': (context) => const FilteredTasksScreen(statusFilter: 'completed', title: 'Completed Tasks'),
+            '/overdue-tasks': (context) => const FilteredTasksScreen(statusFilter: 'overdue', title: 'Overdue Tasks'),
+            '/notifications': (context) => const NotificationsScreen(),
+            '/profile': (context) => const ProfileScreen(),
+            '/settings': (context) => const SettingsScreen(),
+            '/reminder-config': (context) => const ReminderConfigScreen(),
+          },
+        );
       },
     );
   }

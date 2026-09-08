@@ -19,8 +19,20 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   DateTime _selectedDate = DateTime.now().add(const Duration(days: 1));
   TimeOfDay _selectedTime = const TimeOfDay(hour: 10, minute: 0);
   String _selectedPriority = 'medium';
+  final List<String> _subtaskItems = [];
+  final _subtaskInputController = TextEditingController();
   final List<String> _selectedReminderPresets = ['30_minutes_before', '1_day_before'];
   bool _isLoading = false;
+
+  void _addSubtaskItem() {
+    final text = _subtaskInputController.text.trim();
+    if (text.isNotEmpty) {
+      setState(() {
+        _subtaskItems.add(text);
+        _subtaskInputController.clear();
+      });
+    }
+  }
 
   void _pickDueDate() async {
     final pickedDate = await showDatePicker(
@@ -81,6 +93,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       ).toUtc();
 
       final remindersPayload = _selectedReminderPresets.map((type) => {'reminder_type': type}).toList();
+      final subtasksPayload = _subtaskItems.map((item) => {'title': item, 'is_completed': false}).toList();
 
       final client = ApiClient();
       final response = await client.dio.post(
@@ -91,6 +104,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           'due_at': dueDateTime.toIso8601String(),
           'priority': _selectedPriority,
           'category': _categoryController.text.trim().isEmpty ? 'General' : _categoryController.text.trim(),
+          'subtasks': subtasksPayload,
           'reminders': remindersPayload,
         },
       );
@@ -252,6 +266,64 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                           prefixIcon: Icon(Icons.folder_outlined, color: AppTheme.primaryBlue),
                         ),
                       ),
+                      const SizedBox(height: 24),
+                      const Text(
+                        'Sub-tasks / Checklist (Optional)',
+                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppTheme.navyDark),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: _subtaskInputController,
+                              decoration: const InputDecoration(
+                                hintText: 'Add sub-task item...',
+                                isDense: true,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          IconButton.filled(
+                            onPressed: _addSubtaskItem,
+                            icon: const Icon(Icons.add),
+                            style: IconButton.styleFrom(backgroundColor: AppTheme.primaryBlue),
+                          ),
+                        ],
+                      ),
+                      if (_subtaskItems.isNotEmpty) ...[
+                        const SizedBox(height: 10),
+                        Column(
+                          children: _subtaskItems.asMap().entries.map((entry) {
+                            final idx = entry.key;
+                            final text = entry.value;
+                            return Container(
+                              margin: const EdgeInsets.only(bottom: 6),
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(
+                                color: AppTheme.softBlueBackground,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      const Icon(Icons.check_box_outline_blank, size: 18, color: AppTheme.primaryBlue),
+                                      const SizedBox(width: 8),
+                                      Text(text, style: const TextStyle(fontSize: 13, color: AppTheme.navyDark)),
+                                    ],
+                                  ),
+                                  GestureDetector(
+                                    onTap: () => setState(() => _subtaskItems.removeAt(idx)),
+                                    child: const Icon(Icons.close, size: 18, color: AppTheme.dangerColor),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ],
                       const SizedBox(height: 24),
                       const Text(
                         'Reminder Lead Times',

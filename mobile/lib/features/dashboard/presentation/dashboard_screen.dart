@@ -121,6 +121,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         actions: [
           IconButton(
+            icon: const Icon(Icons.bar_chart_rounded, color: AppTheme.primaryColor),
+            tooltip: 'Analytics',
+            onPressed: () => Navigator.pushNamed(context, '/analytics'),
+          ),
+          IconButton(
             icon: const Icon(Icons.notifications_outlined, color: AppTheme.primaryColor),
             tooltip: 'Notifications',
             onPressed: () => Navigator.pushNamed(context, '/notifications'),

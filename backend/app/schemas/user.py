@@ -17,11 +17,13 @@ class UserCreate(UserBase):
 class UserUpdate(BaseModel):
     name: Optional[str] = None
     timezone: Optional[str] = None
+    telegram_chat_id: Optional[str] = None
 
 
 class UserResponse(UserBase):
     id: UUID
     firebase_uid: Optional[str] = None
+    telegram_chat_id: Optional[str] = None
     created_at: datetime
     updated_at: datetime
 

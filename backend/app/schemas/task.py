@@ -12,6 +12,7 @@ class TaskBase(BaseModel):
     due_at: datetime
     priority: str = "medium"  # low, medium, high, urgent
     category: Optional[str] = None
+    subtasks: Optional[List[dict]] = []
 
 
 class TaskCreate(TaskBase):
@@ -26,12 +27,14 @@ class TaskUpdate(BaseModel):
     priority: Optional[str] = None
     category: Optional[str] = None
     status: Optional[str] = None
+    subtasks: Optional[List[dict]] = None
 
 
 class TaskResponse(TaskBase):
     id: UUID
     user_id: UUID
     status: str
+    subtasks: List[dict] = []
     created_at: datetime
     updated_at: datetime
     reminders: List[ReminderResponse] = []
