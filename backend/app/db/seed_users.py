@@ -1,5 +1,5 @@
 from app.db.session import SessionLocal, engine, Base
-from app.models.user import User
+from app.models import User, Task, Notification, Device, Reminder, RecurringTask
 from app.core.security import hash_password
 from app.core.logging import logger
 
