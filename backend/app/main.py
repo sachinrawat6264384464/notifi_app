@@ -55,8 +55,9 @@ async def global_exception_handler(request: Request, exc: Exception):
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         content={
             "success": False,
-            "message": "Internal server error occurred",
+            "message": str(exc),
             "error_code": "INTERNAL_SERVER_ERROR",
+            "detail": str(exc)
         },
     )
 
