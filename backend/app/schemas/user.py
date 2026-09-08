@@ -11,7 +11,7 @@ class UserBase(BaseModel):
 
 
 class UserCreate(UserBase):
-    firebase_uid: str
+    firebase_uid: Optional[str] = None
 
 
 class UserUpdate(BaseModel):
@@ -21,7 +21,7 @@ class UserUpdate(BaseModel):
 
 class UserResponse(UserBase):
     id: UUID
-    firebase_uid: str
+    firebase_uid: Optional[str] = None
     created_at: datetime
     updated_at: datetime
 
