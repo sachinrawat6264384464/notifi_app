@@ -101,7 +101,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                           children: [
                             Text(
                               'Productivity Score',
-                              style: GoogleFonts.inter(color: Colors.white70, fontSize: 14, fontWeight: FontWeight.w500),
+                              style: GoogleFonts.inter(color: Colors.white.withValues(alpha: 0.70), fontSize: 14, fontWeight: FontWeight.w500),
                             ),
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
@@ -131,7 +131,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                             const SizedBox(width: 12),
                             Text(
                               'Tasks Completed ($_completedTasks/$_totalTasks)',
-                              style: GoogleFonts.inter(color: Colors.white87, fontSize: 14),
+                              style: GoogleFonts.inter(color: Colors.white.withValues(alpha: 0.87), fontSize: 14),
                             ),
                           ],
                         ),
