@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smart_scheduler_mobile/core/theme/app_theme.dart';
-import 'package:smart_scheduler_mobile/core/utils/auth_helper.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
