@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smart_scheduler_mobile/core/theme/app_theme.dart';
 import 'package:smart_scheduler_mobile/core/network/api_client.dart';
+import 'package:smart_scheduler_mobile/core/utils/auth_helper.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -28,21 +28,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _loadProfile() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      _email = user.email ?? _email;
-      if (user.displayName != null && user.displayName!.isNotEmpty) {
-        _nameController.text = user.displayName!;
-      }
-    }
     try {
       final client = ApiClient();
       final response = await client.dio.get('/users/me');
       if (response.data['success'] == true) {
         final data = response.data['data'];
         setState(() {
-          _nameController.text = data['name'] ?? user?.displayName ?? 'Smart Scheduler User';
-          _email = data['email'] ?? user?.email ?? _email;
+          _nameController.text = data['name'] ?? 'Smart Scheduler User';
+          _email = data['email'] ?? _email;
           _timezone = data['timezone'] ?? 'UTC';
           _isLoading = false;
         });
@@ -78,7 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void _signOut() async {
     try {
-      await FirebaseAuth.instance.signOut();
+      await removeAuthToken();
     } catch (e) {
       debugPrint("Sign out note: $e");
     } finally {

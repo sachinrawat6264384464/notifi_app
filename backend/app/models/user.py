@@ -10,7 +10,8 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    firebase_uid = Column(String(128), unique=True, nullable=False, index=True)
+    firebase_uid = Column(String(128), unique=True, nullable=True, index=True)
+    hashed_password = Column(String(255), nullable=True)
     name = Column(String(255), nullable=False)
     email = Column(String(255), unique=True, nullable=False, index=True)
     timezone = Column(String(64), nullable=False, default="UTC")

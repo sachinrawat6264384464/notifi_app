@@ -5,6 +5,7 @@ from fastapi.exceptions import RequestValidationError
 from app.core.config import settings
 from app.core.logging import setup_logging, logger
 from app.api.v1.api import api_router
+from app.db.seed_users import seed_default_users
 
 setup_logging()
 
@@ -14,6 +15,10 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
 )
+
+@app.on_event("startup")
+def on_startup():
+    seed_default_users()
 
 # Set CORS
 if settings.CORS_ORIGINS:

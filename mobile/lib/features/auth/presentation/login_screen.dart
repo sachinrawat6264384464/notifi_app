@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:smart_scheduler_mobile/core/theme/app_theme.dart';
+import 'package:smart_scheduler_mobile/core/network/api_client.dart';
+import 'package:smart_scheduler_mobile/core/utils/auth_helper.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,24 +19,40 @@ class _LoginScreenState extends State<LoginScreen> {
   String? _errorMessage;
 
   void _login() async {
+    if (_emailController.text.trim().isEmpty || _passwordController.text.trim().isEmpty) {
+      setState(() => _errorMessage = "Please enter work email and password");
+      return;
+    }
+
     setState(() {
       _isLoading = true;
       _errorMessage = null;
     });
 
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
+      final client = ApiClient();
+      final response = await client.dio.post(
+        '/auth/login',
+        data: {
+          'email': _emailController.text.trim(),
+          'password': _passwordController.text.trim(),
+        },
       );
-      if (mounted) {
-        Navigator.pushReplacementNamed(context, '/dashboard');
+
+      if (response.data['success'] == true) {
+        final token = response.data['data']['access_token'];
+        await saveAuthToken(token);
+        if (mounted) {
+          Navigator.pushReplacementNamed(context, '/dashboard');
+        }
+      } else {
+        setState(() => _errorMessage = response.data['message'] ?? 'Login failed');
       }
     } catch (e) {
       debugPrint("Auth login exception: $e");
       if (mounted) {
         setState(() {
-          _errorMessage = e.toString().replaceAll(RegExp(r'\[.*?\]'), '').trim();
+          _errorMessage = "Invalid email or password. Please try again.";
         });
       }
     } finally {

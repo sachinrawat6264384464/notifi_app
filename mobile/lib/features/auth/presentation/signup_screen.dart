@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:smart_scheduler_mobile/core/theme/app_theme.dart';
+import 'package:smart_scheduler_mobile/core/network/api_client.dart';
+import 'package:smart_scheduler_mobile/core/utils/auth_helper.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -21,6 +22,13 @@ class _SignupScreenState extends State<SignupScreen> {
   String? _errorMessage;
 
   void _signup() async {
+    if (_nameController.text.trim().isEmpty ||
+        _emailController.text.trim().isEmpty ||
+        _passwordController.text.trim().isEmpty) {
+      setState(() => _errorMessage = 'Please fill all required fields');
+      return;
+    }
+
     if (_passwordController.text.trim() != _confirmPasswordController.text.trim()) {
       setState(() => _errorMessage = 'Passwords do not match');
       return;
@@ -32,24 +40,31 @@ class _SignupScreenState extends State<SignupScreen> {
     });
 
     try {
-      final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
+      final client = ApiClient();
+      final response = await client.dio.post(
+        '/auth/register',
+        data: {
+          'name': _nameController.text.trim(),
+          'email': _emailController.text.trim(),
+          'password': _passwordController.text.trim(),
+        },
       );
-      await credential.user?.updateDisplayName(_nameController.text.trim());
-      await credential.user?.sendEmailVerification();
 
-      if (mounted) {
-        Navigator.pushReplacementNamed(context, '/email-verification');
+      if (response.data['success'] == true) {
+        final token = response.data['data']['access_token'];
+        await saveAuthToken(token);
+        if (mounted) {
+          Navigator.pushReplacementNamed(context, '/dashboard');
+        }
+      } else {
+        setState(() => _errorMessage = response.data['message'] ?? 'Registration failed');
       }
-    } on FirebaseAuthException catch (e) {
-      setState(() {
-        _errorMessage = e.message ?? 'Registration failed';
-      });
     } catch (e) {
-      debugPrint("Signup exception: $e. Navigating to email verification for local testing.");
+      debugPrint("Signup exception: $e");
       if (mounted) {
-        Navigator.pushReplacementNamed(context, '/email-verification');
+        setState(() {
+          _errorMessage = "Failed to register. Email may already be in use.";
+        });
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);

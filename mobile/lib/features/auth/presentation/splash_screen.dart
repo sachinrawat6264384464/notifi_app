@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smart_scheduler_mobile/core/theme/app_theme.dart';
+import 'package:smart_scheduler_mobile/core/utils/auth_helper.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -21,12 +21,9 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(const Duration(seconds: 1));
     if (!mounted) return;
     try {
-      final user = await FirebaseAuth.instance.authStateChanges().first.timeout(
-        const Duration(seconds: 3),
-        onTimeout: () => FirebaseAuth.instance.currentUser,
-      );
+      final token = await getAuthToken();
       if (!mounted) return;
-      if (user != null) {
+      if (token != null && token.isNotEmpty) {
         Navigator.pushReplacementNamed(context, '/dashboard');
       } else {
         Navigator.pushReplacementNamed(context, '/login');
