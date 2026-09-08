@@ -14,8 +14,23 @@ import 'package:smart_scheduler_mobile/features/notifications/presentation/notif
 import 'package:smart_scheduler_mobile/features/profile/presentation/profile_screen.dart';
 import 'package:smart_scheduler_mobile/features/settings/presentation/settings_screen.dart';
 
+import 'package:flutter/foundation.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Catch Flutter UI and Framework errors to prevent immediate app process termination
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+    debugPrint('Uncaught Flutter Error: ${details.exception}');
+  };
+
+  // Catch asynchronous and platform dispatcher errors
+  PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
+    debugPrint('Uncaught Platform Async Error: $error\n$stack');
+    return true; // Prevents process crash
+  };
+
   try {
     if (Firebase.apps.isEmpty) {
       await Firebase.initializeApp(
@@ -29,8 +44,9 @@ void main() async {
       );
     }
   } catch (e) {
-    debugPrint("Firebase init note: $e");
+    debugPrint("Firebase initialization gracefully bypassed: $e");
   }
+
   runApp(const SmartSchedulerApp());
 }
 

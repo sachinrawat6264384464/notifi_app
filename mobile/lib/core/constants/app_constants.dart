@@ -1,6 +1,6 @@
 class AppConstants {
   static const String appName = 'Smart Scheduler';
-  static const String baseUrl = 'http://10.0.2.2:8000/api/v1'; // 10.0.2.2 for Android Emulator, localhost for iOS simulator
+  static const String baseUrl = 'https://notifi-app.onrender.com/api/v1'; // Live Render Production API URL
   
   // Storage keys
   static const String authTokenKey = 'firebase_id_token';

@@ -1,4 +1,4 @@
-package com.example.smart_scheduler_mobile
+package com.botmartz.notifi_app
 
 import io.flutter.embedding.android.FlutterActivity
 
