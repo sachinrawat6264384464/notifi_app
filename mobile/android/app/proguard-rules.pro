@@ -16,3 +16,8 @@
 # Gson / Dio / Serialization
 -keep class com.google.gson.** { *; }
 -keepattributes *Annotation*,Signature,InnerClasses,EnclosingMethod
+
+# Play Store split install & deferred components
+-dontwarn com.google.android.play.core.**
+-keep class com.google.android.play.core.** { *; }
+
