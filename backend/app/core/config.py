@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     @field_validator("DATABASE_URL", mode="before")
     @classmethod
     def validate_database_url(cls, v: str) -> str:
-        if not v or "supabase" in str(v).lower() or "localhost:5432" in str(v).lower() or "postgres:5432" in str(v).lower():
+        if not v or "neon.tech" not in str(v).lower():
             return "postgresql://neondb_owner:npg_f5HqoLObEca2@ep-aged-pine-a5k7hfx1-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require"
         return v
 

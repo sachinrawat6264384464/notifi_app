@@ -45,12 +45,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildStatCard(String title, String count, IconData icon, Color color) {
+    final cardColor = Theme.of(context).cardColor;
+    final borderColor = Theme.of(context).dividerColor;
+    final textColor = Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black;
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: cardColor,
         borderRadius: AppTheme.radiusLg,
-        border: Border.all(color: AppTheme.borderColor, width: 1),
+        border: Border.all(color: borderColor, width: 1),
         boxShadow: [AppTheme.softShadow],
       ),
       child: Column(
@@ -70,7 +74,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               Text(
                 count,
-                style: GoogleFonts.inter(fontSize: 26, fontWeight: FontWeight.w900, color: AppTheme.textPrimary),
+                style: GoogleFonts.inter(fontSize: 26, fontWeight: FontWeight.w900, color: textColor),
               ),
             ],
           ),
@@ -86,8 +90,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cardColor = Theme.of(context).cardColor;
+    final borderColor = Theme.of(context).dividerColor;
+    final textColor = Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black;
+
     return Scaffold(
-      backgroundColor: AppTheme.backgroundColor,
       appBar: AppBar(
         title: RichText(
           text: TextSpan(
@@ -97,7 +104,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 style: GoogleFonts.inter(
                   fontSize: 18,
                   fontWeight: FontWeight.w900,
-                  color: AppTheme.textPrimary,
+                  color: textColor,
                   letterSpacing: 0.5,
                 ),
               ),
@@ -113,11 +120,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
         elevation: 0,
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.white,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1.0),
-          child: Container(color: AppTheme.borderColor, height: 1.0),
+          child: Container(color: borderColor, height: 1.0),
         ),
         actions: [
           IconButton(
@@ -160,7 +165,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   children: [
                                     Text(
                                       'Productivity Overview',
-                                      style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),
+                                      style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.bold, color: textColor),
                                     ),
                                     const SizedBox(height: 2),
                                     Text(
@@ -201,7 +206,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           const SizedBox(height: 32),
                           Text(
                             "Today's Scheduled Tasks",
-                            style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),
+                            style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.bold, color: textColor),
                           ),
                           const SizedBox(height: 14),
                           if ((_dashboardData['today_tasks'] as List).isEmpty)
@@ -209,9 +214,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               padding: const EdgeInsets.all(32),
                               width: double.infinity,
                               decoration: BoxDecoration(
-                                color: AppTheme.softBlue,
+                                color: cardColor,
                                 borderRadius: AppTheme.radiusLg,
-                                border: Border.all(color: AppTheme.borderColor),
+                                border: Border.all(color: borderColor),
                               ),
                               child: Column(
                                 children: [
@@ -219,7 +224,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   const SizedBox(height: 12),
                                   Text(
                                     'No tasks scheduled for today 🎉',
-                                    style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w600, color: AppTheme.textPrimary),
+                                    style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w600, color: textColor),
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
@@ -241,9 +246,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 return Container(
                                   margin: const EdgeInsets.only(bottom: 12),
                                   decoration: BoxDecoration(
-                                    color: Colors.white,
+                                    color: cardColor,
                                     borderRadius: AppTheme.radiusMd,
-                                    border: Border.all(color: AppTheme.borderColor),
+                                    border: Border.all(color: borderColor),
                                     boxShadow: [AppTheme.softShadow],
                                   ),
                                   child: ListTile(
@@ -255,7 +260,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       task['title'],
                                       style: GoogleFonts.inter(
                                         fontWeight: FontWeight.w600,
-                                        color: isCompleted ? AppTheme.textSecondary : AppTheme.textPrimary,
+                                        color: isCompleted ? AppTheme.textSecondary : textColor,
                                         decoration: isCompleted ? TextDecoration.lineThrough : null,
                                       ),
                                     ),
@@ -288,7 +293,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         currentIndex: _currentIndex,
         selectedItemColor: AppTheme.primaryColor,
         unselectedItemColor: AppTheme.textSecondary,
-        backgroundColor: Colors.white,
+        backgroundColor: cardColor,
         type: BottomNavigationBarType.fixed,
         onTap: (index) {
           setState(() => _currentIndex = index);

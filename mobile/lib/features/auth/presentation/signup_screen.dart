@@ -98,11 +98,13 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cardColor = Theme.of(context).cardColor;
+    final borderColor = Theme.of(context).dividerColor;
+    final textColor = Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black;
+
     return Scaffold(
-      backgroundColor: AppTheme.softBlue,
       appBar: AppBar(
         title: const Text('Create Account'),
-        backgroundColor: Colors.white,
         elevation: 0,
       ),
       body: SafeArea(
@@ -113,9 +115,9 @@ class _SignupScreenState extends State<SignupScreen> {
               constraints: const BoxConstraints(maxWidth: 460),
               padding: const EdgeInsets.all(32.0),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: cardColor,
                 borderRadius: AppTheme.radiusLg,
-                border: Border.all(color: AppTheme.borderColor, width: 1),
+                border: Border.all(color: borderColor, width: 1),
                 boxShadow: [AppTheme.softShadow],
               ),
               child: Column(
@@ -124,7 +126,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 children: [
                   Text(
                     'Join BOTMARTZ AI',
-                    style: GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),
+                    style: GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.bold, color: textColor),
                   ),
                   const SizedBox(height: 6),
                   Text(
@@ -146,7 +148,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     const SizedBox(height: 16),
                   ],
 
-                  Text('Full Name', style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: AppTheme.textPrimary)),
+                  Text('Full Name', style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: textColor)),
                   const SizedBox(height: 6),
                   TextField(
                     controller: _nameController,
@@ -154,7 +156,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                   const SizedBox(height: 16),
 
-                  Text('Work Email', style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: AppTheme.textPrimary)),
+                  Text('Work Email', style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: textColor)),
                   const SizedBox(height: 6),
                   TextField(
                     controller: _emailController,
@@ -163,7 +165,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                   const SizedBox(height: 16),
 
-                  Text('Password', style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: AppTheme.textPrimary)),
+                  Text('Password', style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: textColor)),
                   const SizedBox(height: 6),
                   TextField(
                     controller: _passwordController,
@@ -179,7 +181,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                   const SizedBox(height: 16),
 
-                  Text('Confirm Password', style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: AppTheme.textPrimary)),
+                  Text('Confirm Password', style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: textColor)),
                   const SizedBox(height: 6),
                   TextField(
                     controller: _confirmPasswordController,

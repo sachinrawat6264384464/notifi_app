@@ -87,8 +87,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cardColor = Theme.of(context).cardColor;
+    final borderColor = Theme.of(context).dividerColor;
+    final textColor = Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black;
+
     return Scaffold(
-      backgroundColor: AppTheme.softBlue,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -97,9 +100,9 @@ class _LoginScreenState extends State<LoginScreen> {
               constraints: const BoxConstraints(maxWidth: 440),
               padding: const EdgeInsets.all(32.0),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: cardColor,
                 borderRadius: AppTheme.radiusLg,
-                border: Border.all(color: AppTheme.borderColor, width: 1),
+                border: Border.all(color: borderColor, width: 1),
                 boxShadow: [AppTheme.softShadow],
               ),
               child: Column(
@@ -111,9 +114,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: AppTheme.softBlue,
+                        color: AppTheme.primaryColor.withValues(alpha: 0.1),
                         shape: BoxShape.circle,
-                        border: Border.all(color: AppTheme.borderColor),
+                        border: Border.all(color: borderColor),
                       ),
                       child: const Icon(Icons.psychology_alt_rounded, size: 36, color: AppTheme.primaryColor),
                     ),
@@ -128,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: GoogleFonts.inter(
                               fontSize: 22,
                               fontWeight: FontWeight.w900,
-                              color: AppTheme.textPrimary,
+                              color: textColor,
                               letterSpacing: 0.5,
                             ),
                           ),
@@ -171,7 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   // Email Field
                   Text(
                     'Work Email',
-                    style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: AppTheme.textPrimary),
+                    style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: textColor),
                   ),
                   const SizedBox(height: 6),
                   TextField(
@@ -179,7 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
                       hintText: 'name@company.com',
-                      prefixIcon: Icon(Icons.email_outlined, color: AppTheme.textSecondary, size: 20),
+                      prefixIcon: Icon(Icons.email_outlined, size: 20),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -190,7 +193,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       Text(
                         'Password',
-                        style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: AppTheme.textPrimary),
+                        style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: textColor),
                       ),
                       GestureDetector(
                         onTap: () => Navigator.pushNamed(context, '/forgot-password'),
@@ -207,11 +210,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     obscureText: _obscurePassword,
                     decoration: InputDecoration(
                       hintText: '••••••••••••',
-                      prefixIcon: const Icon(Icons.lock_outline, color: AppTheme.textSecondary, size: 20),
+                      prefixIcon: const Icon(Icons.lock_outline, size: 20),
                       suffixIcon: IconButton(
                         icon: Icon(
                           _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                          color: AppTheme.textSecondary,
                           size: 20,
                         ),
                         onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
@@ -232,12 +234,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   // Divider
                   Row(
                     children: [
-                      const Expanded(child: Divider(color: AppTheme.borderColor)),
+                      Expanded(child: Divider(color: borderColor)),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         child: Text('OR', style: GoogleFonts.inter(fontSize: 12, color: AppTheme.textSecondary, fontWeight: FontWeight.w600)),
                       ),
-                      const Expanded(child: Divider(color: AppTheme.borderColor)),
+                      Expanded(child: Divider(color: borderColor)),
                     ],
                   ),
                   const SizedBox(height: 16),
@@ -247,7 +249,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () {
                       _login(); // Fallback login for dev mode
                     },
-                    icon: const Icon(Icons.g_mobiledata, size: 28, color: AppTheme.textPrimary),
+                    icon: Icon(Icons.g_mobiledata, size: 28, color: textColor),
                     label: const Text('Continue with Google'),
                   ),
                   const SizedBox(height: 24),
