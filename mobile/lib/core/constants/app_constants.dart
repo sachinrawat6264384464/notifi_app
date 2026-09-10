@@ -1,6 +1,6 @@
 class AppConstants {
   static const String appName = 'Smart Scheduler';
-  static const String baseUrl = 'https://notifi-app.onrender.com/api/v1'; // Live Render Production API URL
+  static const String baseUrl = 'https://handcuff-dweller-crimp.ngrok-free.dev/api/v1'; // Local Backend Tunnel (Ngrok)
   
   // Storage keys
   static const String authTokenKey = 'firebase_id_token';
